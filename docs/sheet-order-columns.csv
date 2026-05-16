@@ -1,0 +1,1 @@
+order_id,created_at,status,customer_name,phone_local,phone_e164,phone_capi_numeric,items,main_products,offer_pieces,subtotal_da,shipping_da,total_da,upsell_accepted,upsell_product,upsell_price_da,currency,landing_page,referrer,utm_source,utm_medium,utm_campaign,utm_content,utm_term,fbclid,ttclid,snap_click_id,meta_event_id,tiktok_event_id,snap_event_id,user_agent,ip_address,notes
