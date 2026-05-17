@@ -1,128 +1,131 @@
 # Google Apps Script Webhook
 
-Use this script in the Google Sheet that receives COD orders.
+Receives COD orders from the Shefaa backend and appends them to a Google Sheet.
 
-## Setup
+## Sheet Column Structure
 
-1. Create a Google Sheet.
-2. Add the columns from `sheet-order-columns.csv` to the first row.
-3. Open Extensions > Apps Script.
-4. Paste the script below.
-5. Set Script Property:
-   - `SHEFAA_WEBHOOK_SECRET`
-6. Deploy as Web App:
-   - Execute as: Me.
-   - Who has access: Anyone.
-7. Add the deployment URL to backend env:
-   - `GOOGLE_SHEET_WEBHOOK_URL`
-8. Add the same secret to backend env:
-   - `GOOGLE_SHEET_WEBHOOK_SECRET`
+| Column | Example |
+|---|---|
+| date | 01/05/2026 |
+| order id | SHEFA1A2B3C4D |
+| country | Algeria |
+| name | فاطمة بن علي |
+| phone | 0696799755 |
+| product | علكات البيوتين/زيت الأرغان |
+| sku | SHF-BTN-001/SHF-ARG-005 |
+| quantity | 3/2 |
+| status | *(left empty — fill manually)* |
+| totalprice | 6280 |
+
+## Setup Instructions
+
+1. Create a new Google Sheet.
+2. In the first row add these exact headers (row 1):
+   ```
+   date | order id | country | name | phone | product | sku | quantity | status | totalprice
+   ```
+3. Open **Extensions → Apps Script**.
+4. Delete any existing code, paste the script below.
+5. Click **Save** (floppy disk icon).
+6. Click **Deploy → New deployment**.
+   - Type: **Web app**
+   - Execute as: **Me**
+   - Who has access: **Anyone**
+7. Click **Deploy** and copy the Web App URL.
+8. Add the URL to your backend environment variable:
+   ```
+   GOOGLE_SHEET_WEBHOOK_URL=https://script.google.com/macros/s/YOUR_ID/exec
+   ```
+
+---
 
 ## Apps Script Code
 
 ```javascript
 const SHEET_NAME = "Orders";
 
+// Column order must match the sheet header exactly
+const COLUMNS = [
+  "date",
+  "order id",
+  "country",
+  "name",
+  "phone",
+  "product",
+  "sku",
+  "quantity",
+  "status",
+  "totalprice"
+];
+
 function doPost(e) {
   try {
-    const expectedSecret = PropertiesService.getScriptProperties().getProperty("SHEFAA_WEBHOOK_SECRET");
-    const receivedSecret = (e && e.parameter && e.parameter.secret) || getHeaderSecret_(e);
-
-    if (!expectedSecret || receivedSecret !== expectedSecret) {
-      return json_({ ok: false, error: "unauthorized" }, 401);
-    }
-
     const payload = JSON.parse(e.postData.contents || "{}");
     const sheet = getOrCreateSheet_();
-    const headers = getHeaders_(sheet);
-    const row = headers.map((header) => stringifyValue_(payload[header]));
+
+    const row = COLUMNS.map(function(col) {
+      const val = payload[col];
+      if (val === null || val === undefined) return "";
+      return String(val);
+    });
 
     sheet.appendRow(row);
 
-    return json_({ ok: true, order_id: payload.order_id || "" }, 200);
-  } catch (error) {
-    return json_({ ok: false, error: String(error) }, 500);
+    return json_({ ok: true, order_id: payload["order id"] || "" });
+  } catch (err) {
+    return json_({ ok: false, error: String(err) });
   }
-}
-
-function getHeaderSecret_(e) {
-  // Apps Script does not reliably expose custom headers for all deployments.
-  // Backend should send both x-shefaa-secret and ?secret=... as fallback.
-  if (!e || !e.headers) return "";
-  return e.headers["x-shefaa-secret"] || e.headers["X-Shefaa-Secret"] || "";
 }
 
 function getOrCreateSheet_() {
-  const spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
-  let sheet = spreadsheet.getSheetByName(SHEET_NAME);
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  let sheet = ss.getSheetByName(SHEET_NAME);
 
   if (!sheet) {
-    sheet = spreadsheet.insertSheet(SHEET_NAME);
+    sheet = ss.insertSheet(SHEET_NAME);
   }
 
+  // Write header row if the sheet is empty
   if (sheet.getLastRow() === 0) {
-    sheet.appendRow([
-      "order_id",
-      "created_at",
-      "status",
-      "customer_name",
-      "phone_local",
-      "phone_e164",
-      "phone_capi_numeric",
-      "items",
-      "main_products",
-      "offer_pieces",
-      "subtotal_da",
-      "shipping_da",
-      "total_da",
-      "upsell_accepted",
-      "upsell_product",
-      "upsell_price_da",
-      "currency",
-      "landing_page",
-      "referrer",
-      "utm_source",
-      "utm_medium",
-      "utm_campaign",
-      "utm_content",
-      "utm_term",
-      "fbclid",
-      "ttclid",
-      "snap_click_id",
-      "meta_event_id",
-      "tiktok_event_id",
-      "snap_event_id",
-      "user_agent",
-      "ip_address",
-      "notes"
-    ]);
+    sheet.appendRow(COLUMNS);
+
+    // Style the header row
+    const headerRange = sheet.getRange(1, 1, 1, COLUMNS.length);
+    headerRange.setBackground("#3F4A2F");
+    headerRange.setFontColor("#FFFFFF");
+    headerRange.setFontWeight("bold");
+    sheet.setFrozenRows(1);
   }
 
   return sheet;
 }
 
-function getHeaders_(sheet) {
-  return sheet.getRange(1, 1, 1, sheet.getLastColumn()).getValues()[0];
-}
-
-function stringifyValue_(value) {
-  if (value === null || value === undefined) return "";
-  if (typeof value === "object") return JSON.stringify(value);
-  return String(value);
-}
-
-function json_(data, statusCode) {
+function json_(data) {
   return ContentService
-    .createTextOutput(JSON.stringify({ ...data, statusCode }))
+    .createTextOutput(JSON.stringify(data))
     .setMimeType(ContentService.MimeType.JSON);
 }
 ```
 
-## Backend Sending Notes
+---
 
-Because Apps Script custom header access can be inconsistent, send the secret both ways:
+## Backend Environment Variable
 
-- Header: `x-shefaa-secret`
-- Query param: `?secret=<GOOGLE_SHEET_WEBHOOK_SECRET>`
+Add only this one variable (no secret needed):
 
-Send only after the order is saved in Postgres.
+```env
+GOOGLE_SHEET_WEBHOOK_URL=https://script.google.com/macros/s/YOUR_DEPLOYMENT_ID/exec
+```
+
+## Product SKUs Reference
+
+| Product | ID | SKU |
+|---|---|---|
+| علكات البيوتين | biotin-gummies | SHF-BTN-001 |
+| كولاجين بحري | marine-collagen | SHF-MCL-002 |
+| عسل بالمكسرات | honey-nuts | SHF-HNY-003 |
+| زبدة الشيا | shea-butter | SHF-SHB-004 |
+| زيت الأرغان | argan-oil | SHF-ARG-005 |
+| جلجلان طبيعي | sesame-seeds | SHF-SES-006 |
+| أعشاب الصحراء | desert-herbs | SHF-HRB-007 |
+| أشواغاندا | ashwagandha | SHF-ASH-008 |

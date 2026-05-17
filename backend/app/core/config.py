@@ -13,6 +13,18 @@ PRODUCT_PRICES: dict[str, dict[int, int]] = {
     "desert-herbs":    {1: 1999, 2: 2790, 3: 3490},
     "ashwagandha":     {1: 1999, 2: 2790, 3: 3490},
 }
+
+PRODUCT_SKUS: dict[str, str] = {
+    "biotin-gummies":  "SHF-BTN-001",
+    "marine-collagen": "SHF-MCL-002",
+    "honey-nuts":      "SHF-HNY-003",
+    "shea-butter":     "SHF-SHB-004",
+    "argan-oil":       "SHF-ARG-005",
+    "sesame-seeds":    "SHF-SES-006",
+    "desert-herbs":    "SHF-HRB-007",
+    "ashwagandha":     "SHF-ASH-008",
+}
+
 UPSELL_PRICE: int = 999
 VALID_PRODUCT_IDS: set[str] = set(PRODUCT_PRICES.keys())
 
@@ -23,7 +35,6 @@ class Settings(BaseSettings):
     BACKEND_CORS_ORIGINS: list[str] = ["https://shefaa.shop", "http://localhost:3000"]
     DATABASE_URL: str = ""
     GOOGLE_SHEET_WEBHOOK_URL: str = ""
-    GOOGLE_SHEET_WEBHOOK_SECRET: str = ""
     META_PIXEL_ID: str = ""
     META_ACCESS_TOKEN: str = ""
     META_TEST_EVENT_CODE: str = ""
