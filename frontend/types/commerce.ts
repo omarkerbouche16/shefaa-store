@@ -32,6 +32,7 @@ export type ProductCategory =
 export interface Product {
   id: string;
   slug: string;
+  sku: string;
   arabicName: string;
   category: ProductCategory;
   headline: string;

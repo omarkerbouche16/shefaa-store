@@ -4,6 +4,7 @@ export const PRODUCTS: Product[] = [
   {
     id: 'biotin-gummies',
     slug: 'biotin-gummies',
+    sku: 'SHF-BTN-001',
     arabicName: 'علكات البيوتين لدعم صحة الشعر',
     category: 'hair',
     headline: 'روتين يومي بسيط لشعر أقوى ومظهر أكثف',
@@ -31,6 +32,7 @@ export const PRODUCTS: Product[] = [
   {
     id: 'marine-collagen',
     slug: 'marine-collagen',
+    sku: 'SHF-MCL-002',
     arabicName: 'مشروب الكولاجين البحري لدعم نضارة البشرة',
     category: 'skin',
     headline: 'نضارة يومية ولمسة عناية من الداخل',
@@ -58,6 +60,7 @@ export const PRODUCTS: Product[] = [
   {
     id: 'honey-nuts',
     slug: 'honey-with-nuts',
+    sku: 'SHF-HNY-003',
     arabicName: 'عسل بالمكسرات',
     category: 'food',
     headline: 'عسل بالمكسرات لطاقة طبيعية ولمّة عائلية',
@@ -83,6 +86,7 @@ export const PRODUCTS: Product[] = [
   {
     id: 'shea-butter',
     slug: 'shea-butter',
+    sku: 'SHF-SHB-004',
     arabicName: 'زبدة الشيا',
     category: 'skin',
     headline: 'زبدة الشيا لعناية طبيعية بالبشرة',
@@ -108,6 +112,7 @@ export const PRODUCTS: Product[] = [
   {
     id: 'argan-oil',
     slug: 'argan-oil',
+    sku: 'SHF-ARG-005',
     arabicName: 'زيت الأرغان',
     category: 'beauty',
     headline: 'زيت الأرغان لجمال الشعر والبشرة',
@@ -135,6 +140,7 @@ export const PRODUCTS: Product[] = [
   {
     id: 'sesame-seeds',
     slug: 'sesame-seeds',
+    sku: 'SHF-SES-006',
     arabicName: 'جلجلان طبيعي',
     category: 'food',
     headline: 'جلجلان طبيعي لغذاء يومي غني',
@@ -161,6 +167,7 @@ export const PRODUCTS: Product[] = [
   {
     id: 'desert-herbs',
     slug: 'desert-herbs',
+    sku: 'SHF-HRB-007',
     arabicName: 'أعشاب الصحراء',
     category: 'herbs',
     headline: 'أعشاب مختارة بروح الصحراء',
@@ -188,6 +195,7 @@ export const PRODUCTS: Product[] = [
   {
     id: 'ashwagandha',
     slug: 'ashwagandha',
+    sku: 'SHF-ASH-008',
     arabicName: 'أشواغاندا طبيعية',
     category: 'herbs',
     headline: 'هدوء وتوازن في روتينك اليومي',
