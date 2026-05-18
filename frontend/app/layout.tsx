@@ -3,6 +3,7 @@ import { Noto_Kufi_Arabic, IBM_Plex_Sans_Arabic, Inter } from 'next/font/google'
 import './globals.css';
 import ClientShell from '@/components/common/ClientShell';
 import PixelProvider from '@/components/tracking/PixelProvider';
+import PageViewTracker from '@/components/tracking/PageViewTracker';
 import { BRAND } from '@/config/brand';
 
 const notoKufi = Noto_Kufi_Arabic({
@@ -55,6 +56,7 @@ export default function RootLayout({
     >
       <body className="font-plex text-charcoal-ink bg-cream antialiased overflow-x-hidden" suppressHydrationWarning>
         <PixelProvider />
+        <PageViewTracker />
         <ClientShell>{children}</ClientShell>
       </body>
     </html>
