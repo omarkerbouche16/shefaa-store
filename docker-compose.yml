@@ -39,6 +39,14 @@ services:
       TIKTOK_ACCESS_TOKEN: ""
       SNAP_PIXEL_ID: ""
       SNAP_ACCESS_TOKEN: ""
+      MAXMIND_ACCOUNT_ID: ""
+      MAXMIND_LICENSE_KEY: ""
+      IPQS_API_KEY: ""
+      WHITELISTED_PHONES: "055000000"
+      ADMIN_USERNAME: "admin"
+      ADMIN_PASSWORD: "changeme"
+      ADMIN_JWT_SECRET: "dev-secret-change-in-production"
+      ADMIN_JWT_EXPIRE_HOURS: "8"
     depends_on:
       postgres:
         condition: service_healthy

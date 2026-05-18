@@ -10,6 +10,8 @@ from app.core.logging import setup_logging
 from app.api.routes.health import router as health_router
 from app.api.routes.orders import router as orders_router
 from app.api.routes.tracking import router as tracking_router
+from app.api.routes.admin import router as admin_router
+from app.api.routes.page_views import router as page_views_router
 
 setup_logging("DEBUG" if settings.ENVIRONMENT == "development" else "INFO")
 logger = logging.getLogger(__name__)
@@ -32,5 +34,7 @@ app.add_middleware(
 app.include_router(health_router)
 app.include_router(orders_router, prefix="/api")
 app.include_router(tracking_router, prefix="/api")
+app.include_router(admin_router, prefix="/api")
+app.include_router(page_views_router, prefix="/api")
 
 logger.info("Shefaa API started | env=%s", settings.ENVIRONMENT)

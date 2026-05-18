@@ -51,6 +51,15 @@ class Settings(BaseSettings):
     # Comma-separated phone numbers that bypass IP fraud checks (for testing)
     WHITELISTED_PHONES: str = "055000000"
 
+    # Second VPN detection platform (IP Quality Score)
+    IPQS_API_KEY: str = ""
+
+    # Admin dashboard credentials
+    ADMIN_USERNAME: str = "admin"
+    ADMIN_PASSWORD: str = ""
+    ADMIN_JWT_SECRET: str = "change-me-in-production"
+    ADMIN_JWT_EXPIRE_HOURS: int = 8
+
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 
 
