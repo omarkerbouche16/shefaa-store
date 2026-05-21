@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import {
-  Page,
   Card,
   FormLayout,
   TextField,
@@ -12,7 +11,6 @@ import {
   BlockStack,
   Text,
   Box,
-  InlineStack,
 } from "@shopify/polaris";
 import { adminLogin } from "../lib/api";
 
@@ -82,17 +80,16 @@ export default function AdminLoginPage() {
                 autoComplete="username"
                 disabled={loading}
               />
-              <TextField
-                label="Password"
-                type="password"
-                value={password}
-                onChange={setPassword}
-                autoComplete="current-password"
-                disabled={loading}
-                onKeyDown={(e: React.KeyboardEvent) => {
-                  if (e.key === "Enter") handleLogin();
-                }}
-              />
+              <div onKeyDown={(e) => { if (e.key === "Enter") handleLogin(); }}>
+                <TextField
+                  label="Password"
+                  type="password"
+                  value={password}
+                  onChange={setPassword}
+                  autoComplete="current-password"
+                  disabled={loading}
+                />
+              </div>
             </FormLayout>
 
             <Button

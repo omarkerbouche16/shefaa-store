@@ -12,8 +12,6 @@ import {
   Badge,
   Button,
   Select,
-  Divider,
-  Box,
   SkeletonBodyText,
   SkeletonDisplayText,
   Banner,
@@ -78,7 +76,7 @@ interface StatCardProps {
   value: string;
   sub?: string;
   loading?: boolean;
-  tone?: "success" | "critical" | "warning" | "info";
+  tone?: "success" | "critical" | "caution" | "subdued";
 }
 
 function StatCard({ title, value, sub, loading, tone }: StatCardProps) {
@@ -245,7 +243,7 @@ export default function DashboardPage() {
               sub="orders / sessions"
               loading={loading}
               tone={
-                (metrics?.conversion_rate ?? 0) >= 2 ? "success" : "warning"
+                (metrics?.conversion_rate ?? 0) >= 2 ? "success" : "caution"
               }
             />
           </div>
@@ -280,8 +278,8 @@ export default function DashboardPage() {
                       tickFormatter={(v: number) => `${(v / 1000).toFixed(0)}k`}
                     />
                     <RechartsTooltip
-                      formatter={(value: number, name: string) =>
-                        name === "revenue" ? fmtDZD(value) : value
+                      formatter={(value, name) =>
+                        name === "Revenue (DZD)" ? fmtDZD(Number(value)) : value
                       }
                     />
                     <Legend />

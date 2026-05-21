@@ -104,7 +104,7 @@ function OrderDetailModal({ orderId, onClose, onStatusChange }: OrderDetailProps
       open={!!orderId}
       onClose={onClose}
       title={order ? `Order ${order.friendly_id}` : "Loading order…"}
-      large
+      size="large"
       primaryAction={{
         content: "Update status",
         onAction: handleStatusChange,
@@ -164,6 +164,7 @@ function OrderDetailModal({ orderId, onClose, onStatusChange }: OrderDetailProps
                 <Card key={i}>
                   <InlineStack gap="400" blockAlign="start">
                     {item.image && (
+                      // eslint-disable-next-line @next/next/no-img-element
                       <img
                         src={item.image}
                         alt={item.name}
