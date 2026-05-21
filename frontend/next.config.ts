@@ -7,7 +7,7 @@ const nextConfig: NextConfig = {
     domains: [],
   },
   experimental: {
-    optimizePackageImports: ['framer-motion'],
+    optimizePackageImports: ['framer-motion', '@shopify/polaris'],
   },
 };
 
