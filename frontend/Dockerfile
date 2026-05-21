@@ -11,6 +11,8 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 ENV NEXT_TELEMETRY_DISABLED=1
+# Cache-bust: forces rebuild when this arg changes (set in EasyPanel build args)
+ARG BUILD_ID=1
 ARG NEXT_PUBLIC_API_BASE_URL
 ARG NEXT_PUBLIC_FB_PIXEL_ID
 ARG NEXT_PUBLIC_TT_PIXEL_ID

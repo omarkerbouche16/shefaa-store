@@ -42,5 +42,5 @@ Thumbs.db
 *.log
 logs/
 
-# Docker
-.dockerignore
+# Docker volumes / overrides (keep .dockerignore tracked)
+docker-compose.override.yml
