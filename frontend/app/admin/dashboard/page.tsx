@@ -18,8 +18,6 @@ import {
   SkeletonDisplayText,
   Banner,
   DataTable,
-  Tooltip,
-  Icon,
 } from "@shopify/polaris";
 import {
   LineChart,

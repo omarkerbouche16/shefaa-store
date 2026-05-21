@@ -20,8 +20,6 @@ import {
   Box,
   Modal,
   Divider,
-  DescriptionList,
-  Thumbnail,
   EmptyState,
 } from "@shopify/polaris";
 import { fetchOrders, fetchOrder, updateOrderStatus, isLoggedIn, clearToken } from "../lib/api";
@@ -142,15 +140,20 @@ function OrderDetailModal({ orderId, onClose, onStatusChange }: OrderDetailProps
 
             {/* Customer info */}
             <Text variant="headingMd" as="h3">Customer</Text>
-            <DescriptionList
-              items={[
+            <BlockStack gap="200">
+              {[
                 { term: "Name", description: order.customer_name },
                 { term: "Phone (local)", description: order.phone_local ?? "—" },
                 { term: "Phone (E.164)", description: order.phone_e164 ?? "—" },
                 { term: "IP Address", description: order.ip_address ?? "—" },
                 { term: "Order date", description: fmtDate(order.created_at) },
-              ]}
-            />
+              ].map((row) => (
+                <InlineStack key={row.term} align="space-between">
+                  <Text variant="bodySm" as="span" tone="subdued">{row.term}</Text>
+                  <Text variant="bodySm" as="span">{row.description}</Text>
+                </InlineStack>
+              ))}
+            </BlockStack>
 
             <Divider />
 
@@ -161,10 +164,10 @@ function OrderDetailModal({ orderId, onClose, onStatusChange }: OrderDetailProps
                 <Card key={i}>
                   <InlineStack gap="400" blockAlign="start">
                     {item.image && (
-                      <Thumbnail
-                        source={item.image}
+                      <img
+                        src={item.image}
                         alt={item.name}
-                        size="medium"
+                        style={{ width: 60, height: 60, objectFit: "cover", borderRadius: 8, flexShrink: 0 }}
                       />
                     )}
                     <BlockStack gap="100">
@@ -223,39 +226,22 @@ function OrderDetailModal({ orderId, onClose, onStatusChange }: OrderDetailProps
 
             {/* Attribution */}
             <Text variant="headingMd" as="h3">Attribution & Technical</Text>
-            <DescriptionList
-              items={[
-                {
-                  term: "UTM Source",
-                  description: order.utm_json?.utm_source ?? "direct",
-                },
-                {
-                  term: "UTM Medium",
-                  description: order.utm_json?.utm_medium ?? "—",
-                },
-                {
-                  term: "UTM Campaign",
-                  description: order.utm_json?.utm_campaign ?? "—",
-                },
-                {
-                  term: "Landing Page",
-                  description: order.landing_page ?? "—",
-                },
+            <BlockStack gap="200">
+              {[
+                { term: "UTM Source", description: order.utm_json?.utm_source ?? "direct" },
+                { term: "UTM Medium", description: order.utm_json?.utm_medium ?? "—" },
+                { term: "UTM Campaign", description: order.utm_json?.utm_campaign ?? "—" },
+                { term: "Landing Page", description: order.landing_page ?? "—" },
                 { term: "Referrer", description: order.referrer ?? "—" },
-                {
-                  term: "Sheet synced",
-                  description: order.sheet_synced_at
-                    ? fmtDate(order.sheet_synced_at)
-                    : "Not yet",
-                },
-                {
-                  term: "Pixel synced",
-                  description: order.tracking_synced_at
-                    ? fmtDate(order.tracking_synced_at)
-                    : "Not yet",
-                },
-              ]}
-            />
+                { term: "Sheet synced", description: order.sheet_synced_at ? fmtDate(order.sheet_synced_at) : "Not yet" },
+                { term: "Pixel synced", description: order.tracking_synced_at ? fmtDate(order.tracking_synced_at) : "Not yet" },
+              ].map((row) => (
+                <InlineStack key={row.term} align="space-between">
+                  <Text variant="bodySm" as="span" tone="subdued">{row.term}</Text>
+                  <Text variant="bodySm" as="span">{String(row.description)}</Text>
+                </InlineStack>
+              ))}
+            </BlockStack>
 
             {order.user_agent && (
               <Box padding="200" background="bg-surface-secondary" borderRadius="200">
